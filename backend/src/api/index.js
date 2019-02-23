@@ -1,14 +1,22 @@
 const api = require('express').Router();
 const Category = require('db/model/Category');
-console.log(1)
 
-api.get('/test', function (req, res) {
-  res.json('test');
+api.get('/category-list', (req, res) => {
+  Category.showAll((err, result) => {
+    res.json(result)
+  })
 })
 
-api.get('categorylist', (req, res) => {
-  console.log(2)
-  Category.showAll((err, result) => {
+api.get('/category-add', (req, res) => {
+  const data = { title: 'category name', display: 1, lastUpdate: new Date() }
+  const currency = new Category(data)
+  const rs = currency.save()
+  res.json(rs)
+})
+
+api.post('/category-remove', (req, res) => {
+  const { _id } = req.body
+  Category.removeCategory(_id).then(result => {
     res.json(result)
   })
 })
