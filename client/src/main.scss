@@ -1,0 +1,34 @@
+@import 'defaultColor';
+
+.Head {
+    text-align: center;
+}
+.Head-header, .Head-tab {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.Head-tab {
+  padding: 1em;
+  justify-content: flex-start;
+}
+.Head-header h1 {
+  width: 100%;
+  font-weight: bold;
+  font-size: 7em;
+}
+.alignLeft {
+  text-align: left;
+}
+.alignRight {
+  text-align: right;
+}
+.cursor-hand {
+  cursor: pointer;
+}
+div, h1 {
+  color : $fontColor;
+}
