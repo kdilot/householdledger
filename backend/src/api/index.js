@@ -14,6 +14,13 @@ api.get('/category-add', (req, res) => {
   res.json(rs)
 })
 
+api.post('/category-edit', (req, res) => {
+  const { _id, value } = req.body
+  Category.editCategory(_id, value).then(result => {
+    res.json(result)
+  })
+})
+
 api.post('/category-remove', (req, res) => {
   const { _id } = req.body
   Category.removeCategory(_id).then(result => {
