@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Main, PageList } from 'page';
+import { MainPage, PageList } from 'page';
 import moment from 'moment';
 import './main.scss';
 
@@ -7,6 +7,9 @@ class App extends Component {
   changeFlag = () => {
     const { flag } = this.state
     this.setState({ flag: !flag })
+  }
+  changeDate = (date) => {
+    this.setState({ today: date })
   }
   changeMonth = (plus) => {
     const { today } = this.state
@@ -22,6 +25,7 @@ class App extends Component {
   state = {
     flag: true,
     today: moment(),
+    changeDate: this.changeDate,
     changeMonth: this.changeMonth,
     changeFlag: this.changeFlag
   }
@@ -32,7 +36,7 @@ class App extends Component {
     return (
       <div className="Head">
         {flag ?
-          <Main {...this.state} />
+          <MainPage {...this.state} />
           :
           <PageList {...this.state} />
         }
