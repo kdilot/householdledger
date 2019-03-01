@@ -1,0 +1,53 @@
+@import '../defaultColor';
+
+.list-edit {
+  background: #d9d9d9;
+  opacity: 0.7;
+}
+
+.list-edit:focus {
+  opacity: 1;
+}
+
+.categoryList {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  text-align: left;
+  border-bottom: 1px solid $fontColor;
+  h1 {
+    margin: 0.5em;
+    padding-left: 0.5em;
+    font-size: 1.5em;
+    display: inline;
+  }
+  h2 {
+    margin: 0.5em;
+    color: $fontColor;
+    font-size: 1em;
+    display: inline;
+    opacity: 0.8;
+  }
+}
+
+.warning {
+  margin: 2em 0;
+}
+
+.highlight {
+  background: $plusColor;
+  opacity: 0.8;
+}
+
+// antd
+
+.ant-list-bordered.ant-list-sm .ant-list-header {
+  padding-left: 16px;
+  padding-right: 24px;
+}
+
+.ant-message {
+  div {
+    color: $fontBackColor;
+  }
+}
