@@ -63,7 +63,6 @@ class CategoryPage extends Component {
     } else if (prevState.apiData.length > 0 && prevState.apiData.length < this.state.apiData.length) {
       this.highlight(this.state.apiData[this.state.apiData.length - 1]._id)
     }
-    // different length and check the _id number
   }
 
   render() {
@@ -80,13 +79,13 @@ class CategoryPage extends Component {
       <div>
         <Col xs={0} sm={0} md={5} lg={5} xl={5} />
         <Col xs={24} sm={24} md={14} lg={14} xl={14}>
-          <div className="alignRight">
+          <div className="alignLeft">
             <Button type="primary" onClick={() => { addCategory() }}>Add</Button>
           </div>
           {apiData.length === 0 ? <Empty /> :
             apiData.map((list, index) => {
               return (
-                <div className={effect === list._id ? 'categoryList highlight' : 'categoryList'} key={index}>
+                <div className={effect === list._id ? 'divFormat categoryList highlight' : 'divFormat categoryList'} key={index}>
                   <h1 className="cursor-hand" onClick={() => removeCategory(list._id)}><Icon type="close-square" style={{ fontSize: '1.5em', color: 'red' }} /></h1>
                   <h1 className="cursor-hand" onClick={() => { selectEditable(index) }}>{editable === index ? <Input placeholder={list.title} ref={(r) => { this.inputRef = r }} autoFocus={true} allowClear onPressEnter={() => { editCategory(this.inputRef.state.value, list._id) }} /> : list.title}</h1>
                   <h2>{moment(list.lastUpdate).format('(MM/DD/YYYY HH:mm:ss)')}</h2>
