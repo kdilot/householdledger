@@ -1,5 +1,26 @@
 const api = require('express').Router();
 const Category = require('db/model/Category');
+const Data = require('db/model/Data');
+
+api.post('/data-list', (req, res) => {
+  const { today } = req.body
+  Data.showAll(today).then(result => {
+    res.json(result)
+  })
+})
+
+api.post('/data-add', (req, res) => {
+  const { title, category, price, type, lastUpdate } = req.body.values
+  const rs = new Data({ title, category, price, type, lastUpdate, display: 1 }).save()
+  res.json(rs)
+})
+
+api.post('/data-remove', (req, res) => {
+  const { _id } = req.body
+  Data.removeData(_id).then(result => {
+    res.json(result)
+  })
+})
 
 api.get('/category-list', (req, res) => {
   Category.showAll((err, result) => {
@@ -8,9 +29,8 @@ api.get('/category-list', (req, res) => {
 })
 
 api.get('/category-add', (req, res) => {
-  const data = { title: 'category name', display: 1, lastUpdate: new Date() }
-  const currency = new Category(data)
-  const rs = currency.save()
+  const params = { title: 'category name', display: 1, lastUpdate: new Date() }
+  const rs = new Category(params).save()
   res.json(rs)
 })
 
