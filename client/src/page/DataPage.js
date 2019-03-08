@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
-import { DatePicker, Card, Row, Col, Icon, Drawer, Button, Form, Input, InputNumber, Select, Empty, message } from 'antd';
+import { DatePicker, Card, Row, Col, Icon, Drawer, Button, Form, Input, InputNumber, Select, Empty, message, Statistic } from 'antd';
 import moment from 'moment';
 import { CurrencyFormat } from 'common';
 import { ApiPost } from 'common/Api';
 const { Option } = Select;
 const monthFormat = 'MM/DD/YYYY';
-const dateFormat = 'MM/DD/YYYY HH:mm:ss';
 
 class DataPage extends Component {
   getData = () => {
-    ApiPost('data-list', {today : this.props.today}).then(res => {
-      this.setState({data: res.data})
+    ApiPost('data-list', { today: this.props.today }).then(res => {
+      const income = res.data.filter(f => f.type === true)
+      const expense = res.data.filter(f => f.type === false)
+      this.setState({
+        data: res.data,
+        income: income.length > 1 ? income.reduce((a, b) => a + b.price, 0) : income.length === 1 ? income[0].price : 0,
+        expense: expense.length > 1 ? expense.reduce((a, b) => a + b.price, 0) : expense.length === 1 ? expense[0].price : 0
+      })
     })
   }
   removeData = (_id) => {
@@ -44,22 +49,33 @@ class DataPage extends Component {
   state = {
     data: [],
     visible: false,
+    income: [],
+    expense: [],
     getData: this.getData,
     removeData: this.removeData,
+    showDrawer: this.showDrawer,
+    handleSubmit: this.handleSubmit,
+    onClose: this.onClose,
   }
   componentDidMount() {
     this.getData()
   }
   componentDidUpdate(prevProps, prevState) {
-    if(moment(prevProps.today).month() !== moment(this.props.today).month()) {
+    if (moment(prevProps.today).month() !== moment(this.props.today).month()) {
       this.getData()
-    } 
+    }
   }
   render() {
     const { getFieldDecorator } = this.props.form
-    const { 
+    const {
       data,
-      removeData
+      removeData,
+      income,
+      expense,
+      visible,
+      showDrawer,
+      handleSubmit,
+      onClose
     } = this.state
     const {
       categoryData,
@@ -69,15 +85,20 @@ class DataPage extends Component {
     return (
       <div className="drawer">
         <div className="alignLeft">
-          <Button type="primary" onClick={this.showDrawer}>Add</Button>
+          <Button type="primary" onClick={showDrawer}>Add</Button>
+        </div>
+        <div className="totalForm alignLeft bold">
+          <Statistic title="Income" value={income} precision={2} valueStyle={{ color: 'green' }} prefix="$" />
+          <Statistic title="Expense" value={expense} precision={2} valueStyle={{ color: 'red' }} prefix="$" />
+          <Statistic title="Change" value={expense > 0 || income > 0 ? ((income - expense) / expense) * 100 : 0} precision={2} valueStyle={{ color: 'gold' }} suffix="%" />
         </div>
         <Drawer
           width={400}
           title="Create a new data"
-          onClose={this.onClose}
-          visible={this.state.visible}
+          onClose={onClose}
+          visible={visible}
         >
-          <Form layout="vertical" hideRequiredMark onSubmit={this.handleSubmit}>
+          <Form layout="vertical" hideRequiredMark onSubmit={handleSubmit}>
             <Row gutter={16}>
               <Col span={24}>
                 <Form.Item label="Title">
@@ -138,7 +159,7 @@ class DataPage extends Component {
                 </Form.Item>
               </Col>
             </Row>
-            <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+            <Button onClick={onClose} style={{ marginRight: 8 }}>
               Cancel
                 </Button>
             <Button type="primary" htmlType="submit">
@@ -148,20 +169,20 @@ class DataPage extends Component {
         </Drawer>
         <Card className="dataList">
           {data.length > 0 ?
-            data.map((m,i) => {
+            data.map((m, i) => {
               return (
                 <Card.Grid className="card" key={i}>
-                  <Col span={12}><h4><Icon type="close-square" style={{ fontSize: '1.5em', color: 'red' }} onClick={()=> {removeData(m._id)}} /></h4></Col>
-                  <Col span={12}><h2>{moment(m.lastUpdate).format(dateFormat)}</h2></Col>
-                  <Col span={24}><h1 className={m.type ? 'plus' : 'minus'}><CurrencyFormat price={m.price} /></h1></Col>
+                  <Col span={12}><h4 className="alignLeft"><Icon type="close-square" style={{ fontSize: '2em' }} onClick={() => { removeData(m._id) }} /></h4></Col>
+                  <Col span={12}><h2>{moment(m.lastUpdate).format(monthFormat)}</h2></Col>
+                  <Col span={24}><h1 className={m.type ? 'plus' : 'minus'}>{m.type ? '+' : '-'}<CurrencyFormat price={m.price} digit={2} /></h1></Col>
                   <Col span={24}><h3>{categoryData.length > 0 && categoryData.filter(f => f._id === m.category)[0] ? categoryData.filter(f => f._id === m.category)[0].title : 'None'}</h3></Col>
-                  <Col span={24}><h2 className="title">{m.title}</h2></Col>
+                  <Col span={24}><h2 className="title alignLeft">{m.title}</h2></Col>
                 </Card.Grid>
               )
-        })
-        :
-        <Empty />
-        }
+            })
+            :
+            <Empty />
+          }
         </Card>
       </div>
     );
