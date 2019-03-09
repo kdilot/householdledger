@@ -9,29 +9,80 @@
   opacity: 1;
 }
 
+.divFormat {
+  border-bottom: 1px solid $fontColor;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  text-align: left;
+  h1 { font-size: 1.5em; }
+  h2 { font-size: 1em; }
+}
+
+.dataList {
+  margin-top: 1em;
+  background: $backgroundColor;
+  text-align: right;
+  h1 { 
+    font-size: 1.7em;
+    font-weight: bold;
+  }
+  h1.plus {
+    border-left: 0.5em solid $plusColor;
+  }
+  h1.minus {
+    border-left: 0.5em solid $minusColor;
+  }
+  h2, h3 { 
+    font-size: 1.1em;
+  }
+  h3 { opacity: 0.8; }
+  .title { 
+    height: 2em;
+    word-wrap: break-word;
+  }
+  .card {
+    width: 20%;
+    @media screen and (max-width: 1024px) {
+      width: 25%;
+    }
+    @media screen and (max-width: 768px) {
+      width: 50%;
+    }
+    @media screen and (max-width: 576px) {
+      width: 100%;
+    }
+  }
+}
+
+.totalForm {
+  margin: 1em 0;
+  display: inline-flex;
+}
+
+.drawer {
+  .ant-input-number-input { color: $fontBackColor }
+}
+
 .categoryList {
   display: flex;
   align-items: center;
   justify-content: left;
   text-align: left;
-  border-bottom: 1px solid $fontColor;
   h1 {
     margin: 0.5em;
     padding-left: 0.5em;
-    font-size: 1.5em;
     display: inline;
   }
   h2 {
     margin: 0.5em;
-    color: $fontColor;
-    font-size: 1em;
     display: inline;
     opacity: 0.8;
   }
 }
 
 .warning {
-  margin: 2em 0;
+  margin: 1em 0;
 }
 
 .highlight {
@@ -40,6 +91,12 @@
 }
 
 // antd
+
+// .ant-card-bordered {
+//   border: none;
+// }
+
+.ant-card-grid { padding: 15px; }
 
 .ant-list-bordered.ant-list-sm .ant-list-header {
   padding-left: 16px;
@@ -51,3 +108,10 @@
     color: $fontBackColor;
   }
 }
+
+.ant-select-selection-selected-value, .ant-input-number-input { color: $fontBackColor; }
+
+.ant-empty-description { color : $fontColor }
+
+.ant-statistic { margin: 0 1em; }
+.ant-statistic-title { font-size: 1.2em; }

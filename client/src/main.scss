@@ -4,7 +4,7 @@
     text-align: center;
 }
 .Head-header, .Head-tab {
-    background-color: #282c34;
+    background-color: $backgroundColor;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -14,9 +14,10 @@
 .Head-tab {
   padding: 1em;
   justify-content: flex-start;
-  h1 {
-    font-size: 3em;
-  }
+}
+.Head-tab h1 {
+  font-size: 3em;
+  margin: 0;
 }
 .Head-header h1 {
   width: 100%;
@@ -32,6 +33,17 @@
 .cursor-hand {
   cursor: pointer;
 }
-div, h1 {
+div, h1, h2, h3, h4, h5 {
   color : $fontColor;
+}
+h1 { font-size: 1.5em; }
+h2, h3, h4, h5 { font-size: 1em; }
+.plus {
+  color: $plusColor;
+}
+.minus {
+  color: $minusColor;
+}
+.bold {
+  font-weight: bold;
 }
