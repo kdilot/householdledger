@@ -31,8 +31,8 @@ DataSchema.statics.removeData = function (_id) {
     return this.findOneAndUpdate({ _id }, { display: 0, lastUpdate: new Date() }, { upsert: false, new: true }).exec()
 }
 
-DataSchema.statics.updateData = function (_id, data) {
-    return this.findOneAndUpdate({ _id }, { ...data, lastUpdate: new Date() }, { upsert: false, new: true }).exec()
+DataSchema.statics.editData = function (_id, data) {
+    return this.findOneAndUpdate({ _id }, { ...data }, { upsert: false, new: true }).exec()
 }
 
 module.exports = mongoose.model('data', DataSchema)
