@@ -10,9 +10,15 @@ api.post('/data-list', (req, res) => {
 })
 
 api.post('/data-add', (req, res) => {
-  const { title, category, price, type, lastUpdate } = req.body.values
-  const rs = new Data({ title, category, price, type, lastUpdate, display: 1 }).save()
-  res.json(rs)
+  const { id, title, category, price, type, lastUpdate } = req.body.values
+  if (id) {
+    Data.editData(id, { title, category, price, type, lastUpdate }).then(result => {
+      res.json(result)
+    })
+  } else {
+    const rs = new Data({ title, category, price, type, lastUpdate, display: 1 }).save()
+    res.json(rs)
+  }
 })
 
 api.post('/data-remove', (req, res) => {
