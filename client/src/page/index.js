@@ -1,0 +1,5 @@
+export { default as MainPage } from './MainPage'
+export { default as PageList } from './PageList'
+export { default as DataPage } from './DataPage'
+export { default as CategoryPage } from './CategoryPage'
+export { default as ReportPage } from './ReportPage'
