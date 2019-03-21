@@ -53,3 +53,26 @@ h2, h3, h4, h5 { font-size: 1em; }
 .title h1 {
   font-size: 2em;
 }
+
+
+// antd
+
+.ant-card-grid { padding: 15px; }
+
+.ant-list-bordered.ant-list-sm .ant-list-header {
+  padding-left: 16px;
+  padding-right: 24px;
+}
+
+.ant-message {
+  div {
+    color: $fontBackColor;
+  }
+}
+
+.ant-select-selection-selected-value, .ant-input-number-input { color: $fontBackColor; }
+
+.ant-empty-description { color : $fontColor }
+
+.ant-statistic { margin: 0 1em; }
+.ant-statistic-title { font-size: 1.2em; }
