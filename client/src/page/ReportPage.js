@@ -7,9 +7,9 @@ import moment from 'moment';
 
 class ReportPage extends Component {
   getDaily = () => {
+    this.setState({ daily: [], inex: [], cate: [], yearly: [], loading: true })
     ApiPost('data-list', { today: this.props.today }).then(res => { // Daily Report
-      this.setState({ daily: [], loading: true })
-      if (res.data) {
+      if (res.data.length > 0) {
         const data = res.data.map(m => moment(m.lastUpdate).format('D')).sort((a, b) => a - b)
         const uniq = data.filter((value, index) => data.indexOf(value) === index)
         const arr = []
@@ -17,27 +17,29 @@ class ReportPage extends Component {
           arr[m] = [res.data.filter(f => f.type === true && moment(f.lastUpdate).format('D') === m).map(n => n.price).reduce((a, b) => a + b, 0),
           res.data.filter(f => f.type === false && moment(f.lastUpdate).format('D') === m).map(n => n.price).reduce((a, b) => (a + b), 0).toFixed(2)]
         )
-        this.setState({ daily: arr, loading: false })
+        this.setState({ daily: arr })
       } else {
         this.setState({ loading: false })
       }
     })
   }
   getYearly = () => {
-    ApiPost('data-list', { today: this.props.today, year: true }).then(res => { // Income / Expense Report
-      this.setState({ inex: [], loading: true })
-      if (res.data) {
+    const { today } = this.props
+    ApiPost('data-list', { today: today, year: true }).then(res => {
+      if (res.data.length > 0) {
         const data = res.data.map(m => moment(m.lastUpdate).format('M')).sort((a, b) => a - b)
         const category = res.data.map(m => m.category).sort((a, b) => a - b)
         const unique_m = data.filter((value, index) => data.indexOf(value) === index)
         const unique_c = category.filter((value, index) => category.indexOf(value) === index)
         const arr_m = []
         const arr_c = []
-        unique_m.map(m =>
+        unique_m.map(m => // Income / Expense Report
           arr_m[m] = [res.data.filter(f => f.type === true && moment(f.lastUpdate).format('M') === m).map(n => n.price).reduce((a, b) => a + b, 0),
           res.data.filter(f => f.type === false && moment(f.lastUpdate).format('M') === m).map(n => n.price).reduce((a, b) => (a + b), 0).toFixed(2)]
         )
-        unique_c.map(c => {
+        arr_m[today.format('YYYY')] = [res.data.filter(f => f.type === true).map(n => n.price).reduce((a, b) => a + b, 0),  // yearly
+        res.data.filter(f => f.type === false).map(n => n.price).reduce((a, b) => (a + b), 0).toFixed(2)]
+        unique_c.map(c => { // Category Report
           const arr = []
           return (
             unique_m.map(m => {
@@ -49,7 +51,10 @@ class ReportPage extends Component {
             })
           )
         })
-        this.setState({ inex: arr_m, cate: arr_c, loading: false })
+        this.setState({
+          inex: arr_m,
+          cate: arr_c,
+        })
       } else {
         this.setState({ loading: false })
       }
@@ -69,7 +74,7 @@ class ReportPage extends Component {
     daily: [],
     inex: [],
     cate: [],
-    loading: false
+    loading: true
   }
   render() {
     const {
@@ -79,51 +84,55 @@ class ReportPage extends Component {
       loading
     } = this.state
     const {
+      today,
       categoryData
     } = this.props
     return (
       <div>
         <div className="box">
-          <h3 className="alignLeft">DAILY REPORT</h3>
+          <h3 className="alignLeft">{today.format('MMMM')} Daily Report</h3>
           <Col span={24}>
-            <Row gutter={10}>
+            <Row gutter={5}>
               {daily.length > 0 ?
                 daily.map((m, i) => <ReportFormat key={i} des={i} income={m[0]} expense={m[1]} type={'D'} />)
-                : loading ? <Spin /> : <Empty />}
+                : loading ? <Spin /> : <Empty />
+              }
             </Row>
           </Col>
         </div>
         <div className="box">
-          <h3 className="alignLeft">INCOME / EXPENSE</h3>
+          <h3 className="alignLeft">{today.format('YYYY')} Income / Expense</h3>
           <Col span={24}>
-            <Row gutter={10}>
+            <Row gutter={5}>
               {inex.length > 0 ?
-                inex.map((m, i) => <ReportFormat key={i} des={moment().month(i - 1).format('MMM')} income={m[0]} expense={m[1]} type={'MMM'} />)
-                : loading ? <Spin /> : <Empty />}
+                inex.map((m, i) => <ReportFormat key={i} des={i > 11 ? i : moment().month(i - 1).format('MMM')} income={m[0]} expense={m[1]} type={'MMM'} />)
+                : loading ? <Spin /> : <Empty />
+              }
             </Row>
           </Col>
         </div>
         <div className="box">
-          <h3 className="alignLeft">CATEGORY</h3>
+          <h3 className="alignLeft">{today.format('YYYY')} Category</h3>
           <Col span={24}>
-            <Row gutter={10}>
+            <Row gutter={5}>
               {cate.length > 0 ?
                 cate.map((m, i) =>
-                  <Col span={4} key={i}>
+                  <Col xs={24} sm={12} md={12} lg={6} xl={4} key={i}>
                     <Col span={24}>
                       <div className="reportTitle">
                         {categoryData.filter(f => f._id === i)[0] ? categoryData.filter(f => f._id === i)[0].title : i}
                       </div>
                     </Col>
                     <Col span={24}>
-                      <Row gutter={10}>
+                      <Row gutter={5}>
                         {m.map((_m, _i) =>
                           <ReportFormat key={_i} des={moment().month(_i - 1).format('MMM')} income={_m[0]} expense={_m[1]} col={true} type={'MMM'} />
                         )}
                       </Row>
                     </Col>
                   </Col>)
-                : ''}
+                : loading ? <Spin /> : <Empty />
+              }
             </Row>
           </Col>
         </div>
