@@ -22,9 +22,14 @@ DataSchema.statics.drop = function () {
     return this.collection.drop()
 }
 
-DataSchema.statics.showAll = function (today) {
-    const date = moment(today).set('date', 1).set('date', 1).set('hour', 0).set('minute', 0).set('second', 0)
-    return this.find({ "display": 1, "lastUpdate": { "$gte": date, "$lt": moment(date).add(1, 'month') } }).sort({ "lastUpdate": 1 })
+DataSchema.statics.showAll = function (today, year = false) {
+    if (!year) {
+        const date = moment(today).startOf('month')
+        return this.find({ "display": 1, "lastUpdate": { "$gte": date, "$lt": moment(date).add(1, 'month') } }).sort({ "lastUpdate": 1 })
+    } else {
+        const date = moment(today).startOf('year')
+        return this.find({ "display": 1, "lastUpdate": { "$gte": date, "$lt": moment(date).add(1, 'year') } }, { "type": 1, "price": 1, "category": 1, "lastUpdate": 1 }).sort({ "lastUpdate": 1 })
+    }
 }
 
 DataSchema.statics.removeData = function (_id) {
