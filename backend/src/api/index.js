@@ -3,8 +3,8 @@ const Category = require('db/model/Category');
 const Data = require('db/model/Data');
 
 api.post('/data-list', (req, res) => {
-  const { today } = req.body
-  Data.showAll(today).then(result => {
+  const { today, year } = req.body
+  Data.showAll(today, year).then(result => {
     res.json(result)
   })
 })
