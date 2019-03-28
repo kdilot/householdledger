@@ -43,7 +43,7 @@ const DrawerFormat = ({ state, props }) => {
               {getFieldDecorator('price', {
                 rules: [{ required: true, message: 'Please enter the price' }],
                 initialValue: selectedData ? selectedData.price : null
-              })(<InputNumber formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} placeholder="Please enter the price" />)}
+              })(<InputNumber formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} min={0} placeholder="Please enter the price" />)}
             </Form.Item>
           </Col>
           <Col span={12}>
