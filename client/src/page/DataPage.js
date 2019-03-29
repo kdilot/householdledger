@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Row, Col, Icon, Button, Form, Empty, message, Statistic } from 'antd';
+import { Card, Row, Col, Icon, Button, Form, Empty, Spin, message, Statistic } from 'antd';
 import moment from 'moment';
 import { CurrencyFormat, DrawerFormat } from 'common';
 import { ApiPost } from 'common/Api';
@@ -8,25 +8,30 @@ const ButtonGroup = Button.Group;
 
 class DataPage extends Component {
   getData = () => {
+    this.setState({ data: [], income: 0, expense: 0, loading: true })
     ApiPost('data-list', { today: this.props.today }).then(res => {
-      const { asc, sort } = this.state
-      const income = res.data.filter(f => f.type === true)
-      const expense = res.data.filter(f => f.type === false)
-      const data = res.data.sort((a, b) => {
-        if (sort === 'date') {
-          return asc ? moment(a.lastUpdate) - moment(b.lastUpdate) : moment(b.lastUpdate) - moment(a.lastUpdate)
-        } else if (sort === 'title') {
-          return asc ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)
-        } else if (sort === 'price') {
-          return asc ? a.price - b.price : b.price - a.price
-        }
-        return true
-      })
-      this.setState({
-        data: data,
-        income: income.length > 1 ? income.reduce((a, b) => a + b.price, 0) : income.length === 1 ? income[0].price : 0,
-        expense: expense.length > 1 ? expense.reduce((a, b) => a + b.price, 0) : expense.length === 1 ? expense[0].price : 0
-      })
+      if (res.data.length > 0) {
+        const { asc, sort } = this.state
+        const income = res.data.filter(f => f.type === true)
+        const expense = res.data.filter(f => f.type === false)
+        const data = res.data.sort((a, b) => {
+          if (sort === 'date') {
+            return asc ? moment(a.lastUpdate) - moment(b.lastUpdate) : moment(b.lastUpdate) - moment(a.lastUpdate)
+          } else if (sort === 'title') {
+            return asc ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)
+          } else if (sort === 'price') {
+            return asc ? a.price - b.price : b.price - a.price
+          }
+          return true
+        })
+        this.setState({
+          data: data,
+          income: income.length > 1 ? income.reduce((a, b) => a + b.price, 0) : income.length === 1 ? income[0].price : 0,
+          expense: expense.length > 1 ? expense.reduce((a, b) => a + b.price, 0) : expense.length === 1 ? expense[0].price : 0
+        })
+      } else {
+        this.setState({ loading: false })
+      }
     })
   }
   removeData = (_id) => {
@@ -73,6 +78,7 @@ class DataPage extends Component {
     income: [],
     expense: [],
     visible: false,
+    loading: true,
     selectedData: null,
     sort: 'date',
     asc: true,
@@ -86,7 +92,7 @@ class DataPage extends Component {
     this.getData()
   }
   componentDidUpdate(prevProps, prevState) {
-    if (moment(prevProps.today).month() !== moment(this.props.today).month()) {
+    if (moment(prevProps.today).month() !== moment(this.props.today).month() || moment(prevProps.today).year() !== moment(this.props.today).year()) {
       this.getData()
     }
   }
@@ -97,6 +103,7 @@ class DataPage extends Component {
       expense,
       sort,
       asc,
+      loading,
       removeData,
       showDrawer,
       changeSort,
@@ -116,7 +123,7 @@ class DataPage extends Component {
         <Row className="totalForm alignLeft bold">
           <Statistic title="Income" value={income} precision={2} valueStyle={{ color: 'green' }} prefix="$" />
           <Statistic title="Expense" value={expense} precision={2} valueStyle={{ color: 'red' }} prefix="$" />
-          <Statistic title="Change" value={expense > 0 || income > 0 ? ((income - expense) / expense) * 100 : 0} precision={2} valueStyle={{ color: 'gold' }} suffix="%" />
+          <Statistic title="Change" value={expense > 0 && income > 0 ? ((income - expense) / expense) * 100 : 0} precision={2} valueStyle={{ color: 'gold' }} suffix="%" />
         </Row>
         <Row className="alignLeft dataSort">
           <ButtonGroup>
@@ -138,13 +145,12 @@ class DataPage extends Component {
                   </Col>
                   <Col span={12}><h2>{moment(m.lastUpdate).format(monthFormat)}</h2></Col>
                   <Col span={24}><h1 className={m.type ? 'plus' : 'minus'}>{m.type ? '+' : '-'}<CurrencyFormat price={m.price} digit={2} /></h1></Col>
-                  <Col span={24}><h3>{categoryData.length > 0 && categoryData.filter(f => f._id === m.category)[0] ? categoryData.filter(f => f._id === m.category)[0].title : 'None'}</h3></Col>
-                  <Col span={24}><h2 className="title alignLeft">{m.title}</h2></Col>
+                  <Col span={24}><h3>{categoryData.length > 0 && categoryData.filter(f => f._id === m.category)[0] ? categoryData.filter(f => f._id === m.category)[0].title : '-'}</h3></Col>
+                  <Col span={24}><h2 className="title">{m.title}</h2></Col>
                 </Card.Grid>
               )
             })
-            :
-            <Empty />
+            : loading ? <Spin /> : <Empty />
           }
         </Card>
       </div>
