@@ -19,7 +19,7 @@ class ReportFormat extends Component {
             < Col xs={24} sm={col ? 24 : 12} md={col ? 24 : 12} lg={col ? 24 : 6} xl={col ? 24 : 4} >
               <div className={c.today.format(type).localeCompare(des) === 0 ? "reportbox selected" : "reportbox"}>
                 <Col span={4}>
-                  <h1><Avatar className={c.today.format(type).localeCompare(des) === 0 ? "avatar selected" : "avatar"} size={40}>{des}</Avatar></h1>
+                  <h1><Avatar className={c.today.format(type).localeCompare(des) === 0 ? "avatar selected" : "avatar"} size={35}>{des}</Avatar></h1>
                 </Col>
                 <Col span={10}>
                   <h1 className="plus"><CurrencyFormat price={income} /></h1>
