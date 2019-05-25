@@ -1,25 +1,32 @@
-@import '../defaultColor';
+@import "../defaultColor";
 
-h3 { 
+h3 {
   font-size: 2.5em;
   margin: 0;
 }
-.box { 
+.box {
   height: auto;
   margin-bottom: 5em;
- }
+  h3 {
+    margin-top: 0.5em;
+  }
+}
 .reportbox {
   padding: 0.2em;
   border: 2px solid;
   border-radius: 10px;
   display: flex;
   align-items: center;
-  h1, h2, h3 { font-weight: bold; }
+  h1,
+  h2,
+  h3 {
+    font-weight: bold;
+  }
   h1 {
     font-size: 1.1em;
   }
   h2 {
-    font-size: 1.0em;
+    font-size: 1em;
   }
   .avatar {
     background: $fontColor;
@@ -29,7 +36,8 @@ h3 {
     background: yellow;
   }
 }
-.reportbox, .reportTitle {
+.reportbox,
+.reportTitle {
   margin: 0.15em 0;
 }
 .reportTitle {
@@ -42,4 +50,35 @@ h3 {
   border: 2px solid yellow;
 }
 
-
+.reportList {
+  margin: 0.1rem 0;
+  padding: 0;
+  min-height: 2rem;
+  border: 1px solid;
+  display: grid;
+  grid-template-columns: 1fr repeat(2, 2fr);
+  align-items: center;
+  justify-content: center;
+  p {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    padding: 0;
+    margin: 0;
+  }
+  p:first-child {
+    border-right: 1px solid $fontColor;
+  }
+}
+.sselected {
+  border: 2px solid yellow;
+  p:first-child {
+    font-weight: bold;
+    color: $backgroundColor;
+    background: yellow;
+    border-right: 2px solid yellow;
+  }
+}

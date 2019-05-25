@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ReportFormat } from 'common';
+import { ReportFormat, ReportListFormat } from 'common';
 import { ApiPost } from 'common/Api';
 import { Row, Col, Empty, Spin } from 'antd';
 import './report.scss';
@@ -33,12 +33,14 @@ class ReportPage extends Component {
         const unique_c = category.filter((value, index) => category.indexOf(value) === index)
         const arr_m = []
         const arr_c = []
+
         unique_m.map(m => // Income / Expense Report
           arr_m[m] = [res.data.filter(f => f.type === true && moment(f.lastUpdate).format('M') === m).map(n => n.price).reduce((a, b) => a + b, 0),
           res.data.filter(f => f.type === false && moment(f.lastUpdate).format('M') === m).map(n => n.price).reduce((a, b) => (a + b), 0).toFixed(2)]
         )
-        arr_m[today.format('YYYY')] = [res.data.filter(f => f.type === true).map(n => n.price).reduce((a, b) => a + b, 0),  // yearly
-        res.data.filter(f => f.type === false).map(n => n.price).reduce((a, b) => (a + b), 0).toFixed(2)]
+        arr_m[today.format('YYYY')] = [res.data.filter(f => f.type === true).map(n => n.price).reduce((a, b) => a + b, 0),
+        res.data.filter(f => f.type === false).map(n => n.price).reduce((a, b) => (a + b), 0).toFixed(2)]  // yearly
+
         unique_c.map(c => { // Category Report
           const arr = []
           return (
@@ -90,31 +92,40 @@ class ReportPage extends Component {
     return (
       <div>
         <div className="box">
-          <h3 className="alignLeft">{today.format('MMMM')} Daily Report</h3>
           <Col span={24}>
+            <h3 className="alignLeft">Daily Report / {today.format('MMMM')}</h3>
+          </Col>
+          <Col xs={24} sm={16} md={14} lg={18} xl={9}>
             <Row gutter={5}>
               {daily.length > 0 ?
-                daily.map((m, i) => <ReportFormat key={i} des={i} income={m[0]} expense={m[1]} type={'D'} />)
+                daily.map((m, i) => <ReportListFormat key={i} des={i} income={m[0]} expense={m[1]} type={'D'} />)
                 : loading ? <Spin /> : <Empty />
               }
             </Row>
           </Col>
+          <Col xs={0} sm={8} md={10} lg={6} xl={14} />
         </div>
         <div className="box">
-          <h3 className="alignLeft">{today.format('YYYY')} Income / Expense</h3>
           <Col span={24}>
+            <h3 className="alignLeft">{today.format('YYYY')} Income / Expense</h3>
+          </Col>
+          <Col xs={24} sm={16} md={14} lg={18} xl={9}>
             <Row gutter={5}>
               {inex.length > 0 ?
-                inex.map((m, i) => <ReportFormat key={i} des={i > 11 ? i : moment().month(i - 1).format('MMM')} income={m[0]} expense={m[1]} type={'MMM'} />)
+                inex.map((m, i) => <ReportListFormat key={i} des={i > 11 ? i : moment().month(i - 1).format('MMM')} income={m[0]} expense={m[1]} type={'MMM'} />)
                 : loading ? <Spin /> : <Empty />
               }
             </Row>
           </Col>
+          <Col xs={0} sm={8} md={10} lg={6} xl={14} />
         </div>
         <div className="box">
-          <h3 className="alignLeft">{today.format('YYYY')} Category</h3>
+          <Col span={24}>
+            <h3 className="alignLeft">{today.format('YYYY')} Category</h3>
+          </Col>
           <Col span={24}>
             <Row gutter={5}>
+              {console.log(cate)}
               {cate.length > 0 ?
                 cate.map((m, i) =>
                   <Col xs={24} sm={12} md={12} lg={6} xl={4} key={i}>
@@ -136,7 +147,7 @@ class ReportPage extends Component {
             </Row>
           </Col>
         </div>
-      </div>
+      </div >
     );
   }
 }
