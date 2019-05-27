@@ -136,13 +136,12 @@ class ReportPage extends Component {
           </Col>
           <Col span={24}>
             <Row gutter={5}>
-              {console.log(cate)}
               {cate.length > 0 ?
                 cate.map((m, i) =>
                   <Col xs={24} sm={12} md={8} lg={6} xl={4} key={i}>
                     <Col span={24}>
                       <div className={today.format('M').localeCompare(i) === 0 ? "reportTitle titleSelected" : "reportTitle"}>
-                        {i > 11 ? 'Total' : moment().month(i - 1).format('MMM')}
+                        {i > 12 ? 'Total' : moment().month(i - 1).format('MMM')}
                       </div>
                     </Col>
                     <Col span={24}>
