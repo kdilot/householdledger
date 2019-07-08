@@ -1,0 +1,60 @@
+@import "../defaultColor";
+
+.dataGrid {
+  display: flex;
+  margin-top: 1em;
+  margin-right: 0.5rem;
+  background: $backgroundColor;
+  text-align: center;
+  border: 1px solid $fontColor;
+  align-items: center;
+  h1 {
+    font-size: 1.2em;
+    border-bottom: 1px solid $fontColor;
+  }
+  h2 {
+    font-size: 1.3em;
+  }
+  h3 {
+    padding: 0 1rem;
+    font-size: 1.2em;
+    opacity: 0.9;
+  }
+  h3.title {
+    opacity: 1;
+    font-size: 1.1em;
+    text-align: left;
+    word-wrap: break-word;
+  }
+  .group {
+    padding: 5px 1rem;
+    border-right: 1px solid $fontColor;
+    h4 {
+      margin-top: 5px;
+    }
+  }
+  .group:nth-child(2) {
+    border-right: none;
+    padding: 0;
+    h2 {
+      padding: 0 1rem;
+    }
+    h3 {
+      border-bottom: 1px solid $fontColor;
+    }
+  }
+  .group.plus {
+    border-left: 1rem solid $plusColor;
+    color: $fontColor;
+  }
+  .group.minus {
+    border-left: 1rem solid $minusColor;
+    color: $fontColor;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+  }
+}
