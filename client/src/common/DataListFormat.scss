@@ -1,0 +1,39 @@
+@import '../defaultColor';
+
+.dataList {
+  margin-top: 1em;
+  background: $backgroundColor;
+  text-align: center;
+  .card {
+    text-align: right;
+    width: 20%;
+    @media screen and (max-width: 1024px) {
+      width: 25%;
+    }
+    @media screen and (max-width: 768px) {
+      width: 50%;
+    }
+    @media screen and (max-width: 576px) {
+      width: 100%;
+    }
+    h1 { 
+      font-size: 1.7em;
+      font-weight: bold;
+    }
+    h1.plus {
+      border-left: 0.5em solid $plusColor;
+    }
+    h1.minus {
+      border-left: 0.5em solid $minusColor;
+    }
+    h2, h3 { 
+      font-size: 1.1em;
+    }
+    h3 { opacity: 0.8; }
+    .title { 
+      height: 3em;
+      text-align: left;
+      word-wrap: break-word;
+    }
+  }
+}
