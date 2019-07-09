@@ -1,5 +1,9 @@
 @import "../defaultColor";
 
+.gridWrapper {
+  margin-top: 1em;
+  background: $backgroundColor;
+}
 .dataGrid {
   display: flex;
   margin-top: 1em;
@@ -11,36 +15,47 @@
   h1 {
     font-size: 1.2em;
     border-bottom: 1px solid $fontColor;
+    justify-content: center;
   }
-  h2 {
-    font-size: 1.3em;
-  }
-  h3 {
-    padding: 0 1rem;
-    font-size: 1.2em;
-    opacity: 0.9;
-  }
-  h3.title {
-    opacity: 1;
-    font-size: 1.1em;
-    text-align: left;
-    word-wrap: break-word;
-  }
-  .group {
+  .group:nth-child(1) {
     padding: 5px 1rem;
+    width: 7rem;
     border-right: 1px solid $fontColor;
+    align-self: stretch;
+    align-items: center;
     h4 {
       margin-top: 5px;
+      justify-content: center;
     }
   }
   .group:nth-child(2) {
+    width: 100%;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     border-right: none;
-    padding: 0;
     h2 {
-      padding: 0 1rem;
+      font-size: 1.3em;
+      grid-column: 2 / span 1;
+      justify-content: flex-end;
     }
     h3 {
-      border-bottom: 1px solid $fontColor;
+      font-size: 1.2em;
+      opacity: 0.6;
+      grid-column: 1 / span 2;
+      justify-content: flex-start;
+      border-bottom: 1px solid;
+    }
+    h3.title {
+      opacity: 1;
+      font-size: 1.1em;
+      justify-content: flex-start;
+      word-wrap: break-word;
+    }
+    h3:nth-child(2) {
+      grid-column: 1 / span 1;
+      border-bottom: none;
+      border-right: 1px solid;
     }
   }
   .group.plus {
@@ -56,5 +71,8 @@
   h3,
   h4 {
     margin: 0;
+    align-self: stretch;
+    align-items: center;
+    display: flex;
   }
 }

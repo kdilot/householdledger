@@ -1,10 +1,10 @@
 import React from 'react';
-import { Col, Icon, Empty, Spin } from 'antd';
+import { Card, Col, Icon, Empty, Spin } from 'antd';
 import { CurrencyFormat } from 'common';
 import moment from 'moment';
 import './DataGridFormat.scss';
-const monthFormat = 'MM/DD';
 
+const monthFormat = 'MMM D';
 const DataGridFormat = (prop) => {
   const {
     state,
@@ -26,22 +26,22 @@ const DataGridFormat = (prop) => {
                 <div className={m.type ? 'group plus' : 'group minus'}>
                   <h1>{moment(m.lastUpdate).format(monthFormat)}</h1>
                   <h4>
-                    <Icon type="info-circle" style={{ fontSize: '1.5em', marginRight: '0.2em' }} onClick={() => { showDrawer(m) }} />
-                    <Icon type="close-circle" style={{ fontSize: '1.5em' }} onClick={() => { removeData(m._id) }} />
+                    <Icon type="folder-open" style={{ fontSize: '1.5em', marginRight: '0.2em' }} onClick={() => { showDrawer(m) }} />
+                    <Icon type="delete" style={{ fontSize: '1.5em' }} onClick={() => { removeData(m._id) }} />
                   </h4>
                 </div>
                 <div className="group">
-                  <h3>{categoryData.length > 0 && categoryData.filter(f => f._id === m.category)[0] ? categoryData.filter(f => f._id === m.category)[0].title : '-'}</h3>
+                  <h3 className="title">{m.title}</h3>
+                  <h3>CATEGORY : {categoryData.length > 0 && categoryData.filter(f => f._id === m.category)[0] ? categoryData.filter(f => f._id === m.category)[0].title : '-'}</h3>
                   <h2 className={m.type ? 'plus' : 'minus'}>{m.type ? '+' : '-'}
                     <CurrencyFormat price={m.price} digit={2} />
                   </h2>
                 </div>
-                <h3 className="title">{m.title}</h3>
               </div>
             </Col>
           )
         })
-        : loading ? <Spin /> : <Empty />
+        : loading ? <Card className="gridWrapper"><Spin /></Card> : <Card className="gridWrapper"><Empty /></Card>
       }
     </div>
   );
