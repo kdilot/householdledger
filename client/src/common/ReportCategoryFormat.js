@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { CurrencyFormat } from 'common';
 import Context from 'context';
 import { Col } from 'antd';
+import './ReportCategoryFormat.scss';
 
 class ReportCategoryFormat extends Component {
   render() {
