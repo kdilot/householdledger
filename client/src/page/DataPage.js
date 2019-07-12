@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Card, Row, Col, Icon, Button, Form, Empty, Spin, message, Statistic } from 'antd';
+import { Row, Col, Icon, Button, Form, message, Statistic } from 'antd';
 import moment from 'moment';
-import { CurrencyFormat, DrawerFormat } from 'common';
+import { DrawerFormat, DataGridFormat, DataListFormat } from 'common';
 import { ApiPost } from 'common/Api';
-const monthFormat = 'MM/DD/YYYY';
 const ButtonGroup = Button.Group;
 
 class DataPage extends Component {
@@ -72,6 +71,10 @@ class DataPage extends Component {
     }
     this.getData()
   }
+  changeFlag = () => {
+    const { flag } = this.state
+    this.setState({ flag: !flag })
+  }
 
   state = {
     data: [],
@@ -82,11 +85,13 @@ class DataPage extends Component {
     selectedData: null,
     sort: 'date',
     asc: true,
+    flag: true,
     getData: this.getData,
     removeData: this.removeData,
     showDrawer: this.showDrawer,
     handleSubmit: this.handleSubmit,
     changeSort: this.changeSort,
+    changeFlag: this.changeFlag,
   }
   componentDidMount() {
     this.getData()
@@ -98,15 +103,14 @@ class DataPage extends Component {
   }
   render() {
     const {
-      data,
       income,
       expense,
       sort,
       asc,
-      loading,
-      removeData,
+      flag,
       showDrawer,
       changeSort,
+      changeFlag
     } = this.state
     const {
       categoryData,
@@ -126,33 +130,24 @@ class DataPage extends Component {
           <Statistic title="Change" value={expense > 0 && income > 0 ? ((income - expense) / expense) * 100 : 0} precision={2} valueStyle={{ color: 'gold' }} suffix="%" />
         </Row>
         <Row className="alignLeft dataSort">
-          <ButtonGroup>
-            <Button type={sort === 'date' ? 'default' : 'primary'} onClick={() => { changeSort(false, 'date') }}>Date</Button>
-            <Button type={sort === 'title' ? 'default' : 'primary'} onClick={() => { changeSort(false, 'title') }}>description</Button>
-            <Button type={sort === 'price' ? 'default' : 'primary'} onClick={() => { changeSort(false, 'price') }}>Price</Button>
-            <Button type="default" onClick={() => { changeSort() }}><Icon type={`arrow-${asc ? 'up' : 'down'}`} /></Button>
-          </ButtonGroup>
+          <Col span={18}>
+            <ButtonGroup>
+              <Button type={sort === 'date' ? 'default' : 'primary'} onClick={() => { changeSort(false, 'date') }}>Date</Button>
+              <Button type={sort === 'title' ? 'default' : 'primary'} onClick={() => { changeSort(false, 'title') }}>description</Button>
+              <Button type={sort === 'price' ? 'default' : 'primary'} onClick={() => { changeSort(false, 'price') }}>Price</Button>
+              <Button type="default" onClick={() => { changeSort() }}><Icon type={`arrow-${asc ? 'up' : 'down'}`} /></Button>
+            </ButtonGroup>
+          </Col>
+          <Col span={6} className="alignRight">
+            <Button type={flag ? "primary" : 'defualt'} onClick={() => { changeFlag() }} style={{ marginRight: '5px' }}><Icon type="database" style={{ fontSize: '20px' }} /></Button>
+            <Button type={!flag ? "primary" : 'defualt'} onClick={() => { changeFlag() }}><Icon type="appstore" style={{ fontSize: '20px' }} /></Button>
+          </Col>
         </Row>
-        <Card className="dataList">
-          {data.length > 0 ?
-            data.map((m, i) => {
-              return (
-                <Card.Grid className="card" key={i}>
-                  <Col span={12}><h4 className="alignLeft">
-                    <Icon type="close-circle" style={{ fontSize: '2em', marginRight: '0.2em' }} onClick={() => { removeData(m._id) }} />
-                    <Icon type="info-circle" style={{ fontSize: '2em' }} onClick={() => { showDrawer(m) }} />
-                  </h4>
-                  </Col>
-                  <Col span={12}><h2>{moment(m.lastUpdate).format(monthFormat)}</h2></Col>
-                  <Col span={24}><h1 className={m.type ? 'plus' : 'minus'}>{m.type ? '+' : '-'}<CurrencyFormat price={m.price} digit={2} /></h1></Col>
-                  <Col span={24}><h3>{categoryData.length > 0 && categoryData.filter(f => f._id === m.category)[0] ? categoryData.filter(f => f._id === m.category)[0].title : '-'}</h3></Col>
-                  <Col span={24}><h2 className="title">{m.title}</h2></Col>
-                </Card.Grid>
-              )
-            })
-            : loading ? <Spin /> : <Empty />
-          }
-        </Card>
+        {flag ?
+          <DataGridFormat state={this.state} categoryData={categoryData} />
+          :
+          <DataListFormat state={this.state} categoryData={categoryData} />
+        }
       </div>
     );
   }
