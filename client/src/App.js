@@ -51,9 +51,6 @@ class App extends Component {
     this.getCategoryList()
   }
   render() {
-    // const {
-    //   flag,
-    // } = this.state
     return (
       <Context.Provider value={this.state}>
         <div className="Head">
