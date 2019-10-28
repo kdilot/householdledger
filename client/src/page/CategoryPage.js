@@ -71,13 +71,22 @@ class CategoryPage extends Component {
         <Col xs={0} sm={0} md={5} lg={5} xl={5} />
         <Col xs={24} sm={24} md={14} lg={14} xl={14}>
           {categoryData.length > 0 &&
-            <Alert
-              className="warning"
-              showIcon
-              message="Click the Category to edit."
-              type="warning"
-              closable
-            />
+            <>
+              <Alert
+                className="warning"
+                showIcon
+                message="Click the Category to edit."
+                type="warning"
+                closable
+              />
+              <Alert
+                className="warning"
+                showIcon
+                message="Can't remove default category."
+                type="warning"
+                closable
+              />
+            </>
           }
           <div className="alignLeft">
             <Button type="primary" onClick={() => { addCategory() }}>Add</Button>
@@ -86,7 +95,13 @@ class CategoryPage extends Component {
             categoryData.map((list, index) => {
               return (
                 <div className={effect === list._id ? 'divFormat categoryList highlight' : 'divFormat categoryList'} key={index}>
-                  <h1 className="cursor-hand" onClick={() => removeCategory(list._id)}><Icon type="close-square" style={{ fontSize: '1.5em', color: 'red' }} /></h1>
+                  <h1 className="cursor-hand" onClick={() => list._id > 16 && removeCategory(list._id)}>
+                    {list._id <= 16 ?
+                      <Icon type="warning" style={{ fontSize: '1.5em', color: 'yellow' }} />
+                      :
+                      <Icon type="close-square" style={{ fontSize: '1.5em', color: 'red' }} />
+                    }
+                  </h1>
                   <h1 className="cursor-hand" onClick={() => { selectEditable(index) }}>{editable === index ? <Input placeholder={list.title} ref={(r) => { this.inputRef = r }} autoFocus={true} allowClear onPressEnter={() => { editCategory(this.inputRef.state.value, list._id) }} /> : list.title}</h1>
                   <h2>{moment(list.lastUpdate).format('(MM/DD/YYYY)')}</h2>
                 </div>
