@@ -122,7 +122,7 @@ class ReportPage extends Component {
             <>
               <Col xs={24} sm={16} md={14} lg={18} xl={9}>
                 <Row gutter={5}>
-                  {inex.map((m, i) => <ReportListFormat key={i} des={i > 11 ? i : moment().month(i - 1).format('MMM')} income={m[0]} expense={m[1]} type={'MMM'} />)}
+                  {inex.map((m, i) => <ReportListFormat key={i} des={i > 12 ? i : moment().month(i - 1).format('MMM')} income={m[0]} expense={m[1]} type={'MMM'} />)}
                 </Row>
               </Col>
               <Col xs={0} sm={8} md={10} lg={6} xl={14} />
